@@ -7,15 +7,12 @@ import java.math.BigInteger;
 public class Decodificador {
 	public static String received="";
 	public static int posicao=0;
-    //private static int[] header2 = {0,0,0,1, 1,0,1,0, 1,1,0,0, 1,1,1,1, 1,1,1,1, 1,1,0,0, 0,0,0,1, 1,1,0,1};
-    private static int[] header  = {1,1,1,0, 0,1,0,1, 1,0,0,0, 0,1,1,1, 1,1,1,1, 0,0,1,0, 1,1,0,1, 1,1,0,1};
+     private static int[] header  = {1,1,1,0, 0,1,0,1, 1,0,0,0, 0,1,1,1, 1,1,1,1, 0,0,1,0, 1,1,0,1, 1,1,0,1};
     private int[] bitsIn = new int[2032];
     private int[] bits2 = new int[2032];
     private int[] bits3 = new int[2000];
     private int[] ss = {1,1,1,1, 1,1,1,1};
-    //private int[] cs = {0,0,0,0, 0,0};
     private String estimaIn="";
-    //private String estimaOut="";
     
 
 	public static void lerArquivo(String file){
@@ -54,8 +51,9 @@ public class Decodificador {
     	posicao=posicao+2031;
     }
     public void run(String file) throws IOException{
-    	System.out.println("Lendo o arquivo: "+file);
+    	System.out.print("Lendo o arquivo: "+file);
         lerArquivo(file);
+        System.out.println(" Done!");
         int k=0;
         while (posicao != received.length()){
             if(findBlock())
@@ -73,9 +71,8 @@ public class Decodificador {
             	for(int i=0;i<1000;i++)
                 	System.out.print(bits3[i]);
             }*/
-        	 
-        	Runtime.getRuntime().exec("clear"); 
-        	System.out.println(k*100/(received.length()/2032)+"%");
+        	if(k%10==0)
+        		System.out.println(k*100/(received.length()/2032)+"%");
             posicao++;
             k++;
         }
@@ -131,7 +128,7 @@ public class Decodificador {
 
 	public static void main(String args[]) throws IOException{
         Decodificador cod = new Decodificador();
-        cod.run("code1_outE");
+        cod.run("code1_out");
 
     }
 }
