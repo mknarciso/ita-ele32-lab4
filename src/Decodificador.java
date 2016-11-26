@@ -12,8 +12,10 @@ public class Decodificador {
     private int[] bits2 = new int[2032];
     private int[] bits3 = new int[2000];
     private int[] ss = {1,1,1,1, 1,1,1,1};
-    private int[] cs = {0,0,0,0, 0,0};
-    // {Estado,proxEstado,input,output}
+    //private int[] cs = {0,0,0,0, 0,0};
+    private String estimaIn="";
+    //private String estimaOut="";
+    
 
 	public static void lerArquivo(String file){
 		try {
@@ -60,13 +62,21 @@ public class Decodificador {
             descramble();
             removeHeader();
             //System.out.println(received);
+
+            Viterbi vit = new Viterbi();
+        	vit.run(1000, bits3);
+        	estimaIn=estimaIn+vit.getInput();
+        	//estimaOut=estimaOut+vit.getOutput();
             if(k==0){
             	for(int i=0;i<1000;i++)
-                	System.out.print(bits2[i]);
+                	System.out.print(bits3[i]);
             }
             posicao++;
             k++;
         }
+
+    	System.out.println("\nIn? "+estimaIn);
+    	//System.out.println("Out? "+estimaOut);
         //criaTxtHexadecimal(file);
         System.out.println();
        // for(int i=0;i<1000;i++)
