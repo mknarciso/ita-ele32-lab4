@@ -1,5 +1,6 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.math.BigInteger;
 
@@ -34,14 +35,14 @@ public class Decodificador {
 	}
 
 
-	 /*public void criaTxtHexadecimal (String filename){
-		 try(  PrintWriter out = new PrintWriter( filename+"_out.txt" )  ){
-			    out.print( Decodificador.compactado );
+	 public void criaTxtEstimado (String filename){
+		 try(  PrintWriter out = new PrintWriter( filename+"_est.txt" )  ){
+			    out.print( estimaIn );
 		}
 		 catch (Exception e){
-				System.out.println("Deu ruim!");
+				System.out.println("Deu ruim na impressao da saida!");
 		}
-	 }*/
+	 }
     public void readBlock(){
     	for(int i=0;i<2032;i++){
     		if(received.charAt(i+posicao)=='0'){
@@ -52,7 +53,8 @@ public class Decodificador {
     	}    	
     	posicao=posicao+2031;
     }
-    public void run(String file){
+    public void run(String file) throws IOException{
+    	System.out.println("Lendo o arquivo: "+file);
         lerArquivo(file);
         int k=0;
         while (posicao != received.length()){
@@ -64,21 +66,25 @@ public class Decodificador {
             //System.out.println(received);
 
             Viterbi vit = new Viterbi();
-        	vit.run(1000, bits3);
+        	vit.run(2000, bits3);
         	estimaIn=estimaIn+vit.getInput();
         	//estimaOut=estimaOut+vit.getOutput();
-            if(k==0){
+            /*if(k==0){
             	for(int i=0;i<1000;i++)
                 	System.out.print(bits3[i]);
-            }
+            }*/
+        	 
+        	Runtime.getRuntime().exec("clear"); 
+        	System.out.println(k*100/(received.length()/2032)+"%");
             posicao++;
             k++;
         }
 
-    	System.out.println("\nIn? "+estimaIn);
+    	//System.out.println("\nIn? "+estimaIn);
     	//System.out.println("Out? "+estimaOut);
-        //criaTxtHexadecimal(file);
-        System.out.println();
+        criaTxtEstimado(file);
+        System.out.println("Operação finalizada, gerado o arquivo: "+file+"_est.txt");
+        //System.out.println();
        // for(int i=0;i<1000;i++)
         //	System.out.print(bits2[i]);
     }
@@ -123,9 +129,9 @@ public class Decodificador {
 		return true;
 	}
 
-	public static void main(String args[]){
+	public static void main(String args[]) throws IOException{
         Decodificador cod = new Decodificador();
-        cod.run("code1_out");
+        cod.run("code1_outE");
 
     }
 }
