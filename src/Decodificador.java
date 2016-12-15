@@ -59,6 +59,8 @@ public class Decodificador {
         int sumVit=0;
         int actVit;
         int k=0;
+
+        System.out.println("bits: "+received.length());
         while (posicao < received.length()){
             if(findBlock()){
             	readBlock();
@@ -66,7 +68,7 @@ public class Decodificador {
 	            removeHeader();
 	            Viterbi vit = new Viterbi();
 	        	vit.run(2000, bits3);
-	        	actVit = vit.getMin();
+	        	actVit = vit.getMinValue();
 	        	if(actVit<minVit)
 	        		minVit=actVit;
 	        	if(actVit>maxVit)
@@ -81,7 +83,7 @@ public class Decodificador {
             	received=received.substring(1);
             }
         }
-        System.out.println("VitMin: "+minVit+"/ VitMax: "+maxVit+"/ Média: "+sumVit/k);
+        System.out.println("VitMin: "+minVit+"/ VitMax: "+maxVit+"/ Média: "+(float)sumVit/k+"/ Soma:"+sumVit);
     	//System.out.println("\nIn? "+estimaIn);
     	//System.out.println("Out? "+estimaOut);
         criaTxtEstimado(file);
@@ -133,7 +135,7 @@ public class Decodificador {
 
 	public static void main(String args[]) throws IOException{
         Decodificador cod = new Decodificador();
-        cod.run("Augusto_Murilo_1");
+        cod.run("Augusto_Murilo_10");
 
     }
 }

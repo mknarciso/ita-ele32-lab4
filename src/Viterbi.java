@@ -77,6 +77,9 @@ public class Viterbi {
 		}
 		return pos;
 	}
+	public int getMinValue(){
+		return prevWeight[getMin()];
+	}
 	public String getInput(){
 		return prevIn[getMin()];
 	}
