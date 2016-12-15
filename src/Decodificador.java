@@ -135,7 +135,7 @@ public class Decodificador {
 
 	public static void main(String args[]) throws IOException{
         Decodificador cod = new Decodificador();
-        cod.run("Augusto_Murilo_10");
+        cod.run("Augusto_Murilo_20");
 
     }
 }
