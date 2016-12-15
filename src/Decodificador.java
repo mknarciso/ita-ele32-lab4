@@ -54,29 +54,34 @@ public class Decodificador {
     	System.out.print("Lendo o arquivo: "+file);
         lerArquivo(file);
         System.out.println(" Done!");
+        int maxVit=0;
+        int minVit=Integer.MAX_VALUE;
+        int sumVit=0;
+        int actVit;
         int k=0;
-        while (posicao != received.length()){
-            if(findBlock())
+        while (posicao < received.length()){
+            if(findBlock()){
             	readBlock();
-            
-            descramble();
-            removeHeader();
-            //System.out.println(received);
-
-            Viterbi vit = new Viterbi();
-        	vit.run(2000, bits3);
-        	estimaIn=estimaIn+vit.getInput();
-        	//estimaOut=estimaOut+vit.getOutput();
-            /*if(k==0){
-            	for(int i=0;i<1000;i++)
-                	System.out.print(bits3[i]);
-            }*/
-        	if(k%10==0)
-        		System.out.println(k*100/(received.length()/2032)+"%");
-            posicao++;
-            k++;
+	            descramble();
+	            removeHeader();
+	            Viterbi vit = new Viterbi();
+	        	vit.run(2000, bits3);
+	        	actVit = vit.getMin();
+	        	if(actVit<minVit)
+	        		minVit=actVit;
+	        	if(actVit>maxVit)
+	        		maxVit=actVit;
+	        	sumVit=sumVit+actVit;
+	        	estimaIn=estimaIn+vit.getInput();
+	        	if(k%10==0)
+	        		System.out.println(k*100/(received.length()/2032)+"%");
+	            posicao++;
+	            k++;
+	        } else {
+            	received=received.substring(1);
+            }
         }
-
+        System.out.println("VitMin: "+minVit+"/ VitMax: "+maxVit+"/ Média: "+sumVit/k);
     	//System.out.println("\nIn? "+estimaIn);
     	//System.out.println("Out? "+estimaOut);
         criaTxtEstimado(file);
@@ -128,7 +133,7 @@ public class Decodificador {
 
 	public static void main(String args[]) throws IOException{
         Decodificador cod = new Decodificador();
-        cod.run("code1_out");
+        cod.run("Augusto_Murilo_1");
 
     }
 }
